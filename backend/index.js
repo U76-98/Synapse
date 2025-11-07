@@ -1,15 +1,18 @@
 import express from "express";
-import userRoutes from "./routes/userRoutes.js";
+
+import router from "./routes/useRoutes.js";
+
+
 
 const app = express();
 
-// Middleware (optional)
+
 app.use(express.json());
 
-// Use routes
-app.use("/api/users", userRoutes);
+// main route
+app.use("/api", router);
 
-// Start the server
-app.listen(5000, () => {
-  console.log("✅ Server running at http://localhost:5000");
+// start server
+app.listen(3001, () => {
+  console.log("✅ Server running at http://localhost:3001");
 });
