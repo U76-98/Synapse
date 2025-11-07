@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./frontend/codenova
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_BACKEND_URL=http://backend:3001
+      - NEXT_PUBLIC_ML_API_URL=http://aimodel:5000
+    depends_on:
+      - backend
+      - aimodel
+    networks:
+      - synapse-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - ML_API_URL=http://aimodel:5000
+    depends_on:
+      - aimodel
+    networks:
+      - synapse-network
+
+  aimodel:
+    build:
+      context: ./ai_model/model_training
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=production
+    networks:
+      - synapse-network
+
+networks:
+  synapse-network:
+    driver: bridge
